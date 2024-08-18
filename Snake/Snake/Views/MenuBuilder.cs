@@ -58,58 +58,88 @@ namespace Snake.Views
         {
             string feedbackMessage = string.Empty;
             int selectedIndex = 0;
+            int previousIndex = -1;
+
+            // Initial draw of the menu
+            DrawMenu(selectedIndex, feedbackMessage);
 
             while (true)
             {
-                Console.Clear();
-                PrintLargeTitle(menuTitle);
-
-                int totalMenuHeight = _menuItems.Count + 1;
-                int topPadding = (Console.WindowHeight - totalMenuHeight) / 2;
-
-                // Calculate the position for the feedback message
-                int feedbackPosition = topPadding - 10; // Adjust here to move the message up or down
-
-                if (!string.IsNullOrEmpty(feedbackMessage))
-                {
-                    int feedbackPadding = (Console.WindowWidth - feedbackMessage.Length) / 2;
-                    Console.SetCursorPosition(feedbackPadding, feedbackPosition);
-                    Console.WriteLine(feedbackMessage);
-                }
-
-                Console.SetCursorPosition(0, topPadding);
-
-                for (int i = 0; i < _menuItems.Count; i++)
-                {
-                    if (i == selectedIndex)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.White;
-                    }
-                    string itemText = _menuItems[i].option;
-                    int leftPadding = (Console.WindowWidth - itemText.Length) / 2;
-                    Console.SetCursorPosition(leftPadding, Console.CursorTop);
-                    Console.WriteLine(itemText);
-                }
+                bool shouldRedraw = false;
 
                 var keyInfo = Console.ReadKey(true);
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
+                        previousIndex = selectedIndex;
                         selectedIndex = (selectedIndex - 1 + _menuItems.Count) % _menuItems.Count;
+                        shouldRedraw = true;
                         break;
                     case ConsoleKey.DownArrow:
+                        previousIndex = selectedIndex;
                         selectedIndex = (selectedIndex + 1) % _menuItems.Count;
+                        shouldRedraw = true;
                         break;
                     case ConsoleKey.Enter:
                         _menuItems[selectedIndex].action();
                         feedbackMessage = _menuItems[selectedIndex].feedbackMessage;
+                        shouldRedraw = true;
                         break;
+                    default:
+                        continue;
+                }
+
+                if (shouldRedraw)
+                {
+                    UpdateMenuItem(previousIndex, false);
+                    UpdateMenuItem(selectedIndex, true);
                 }
             }
+        }
+
+        private void DrawMenu(int selectedIndex, string feedbackMessage)
+        {
+            Console.Clear();
+            PrintLargeTitle(menuTitle);
+
+            int totalMenuHeight = _menuItems.Count + 1;
+            int topPadding = (Console.WindowHeight - totalMenuHeight) / 2;
+
+            // Calculate the position for the feedback message
+            int feedbackPosition = topPadding - 10; // Adjust here to move the message up or down
+
+            if (!string.IsNullOrEmpty(feedbackMessage))
+            {
+                int feedbackPadding = (Console.WindowWidth - feedbackMessage.Length) / 2;
+                Console.SetCursorPosition(feedbackPadding, feedbackPosition);
+                Console.WriteLine(feedbackMessage);
+            }
+
+            Console.SetCursorPosition(0, topPadding);
+
+            for (int i = 0; i < _menuItems.Count; i++)
+            {
+                UpdateMenuItem(i, i == selectedIndex);
+            }
+            Console.ResetColor();
+        }
+
+        private void UpdateMenuItem(int index, bool isSelected)
+        {
+            if (index < 0 || index >= _menuItems.Count)
+                return;
+
+            int totalMenuHeight = _menuItems.Count + 1;
+            int topPadding = (Console.WindowHeight - totalMenuHeight) / 2;
+            int itemPosition = topPadding + index;
+
+            string itemText = _menuItems[index].option;
+            int leftPadding = (Console.WindowWidth - itemText.Length) / 2;
+
+            Console.SetCursorPosition(leftPadding, itemPosition);
+            Console.ForegroundColor = isSelected ? ConsoleColor.Blue : ConsoleColor.White;
+            Console.WriteLine(itemText);
+            Console.ResetColor();
         }
 
         private static void PrintLargeTitle(string title)

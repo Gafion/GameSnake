@@ -48,6 +48,8 @@ namespace Snake.Controllers
                             Logger.Log("Game paused.");
                             PauseMenu.PauseMenuRun(this);
                             break;
+                        default:
+                            return; // Ignore any other key presses
                     }
                     Logger.Log("Direction changed to: " + _snake.Direction);
                 }
