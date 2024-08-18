@@ -10,15 +10,11 @@ namespace Snake
         
         static void Main()
         {
+            Console.CursorVisible = false;
+            GameSettings.SetConsoleWindowSize(GameSettings.selectedSize);
             try
             {
-                GameSettings.SetConsoleWindowSize(GameSettings.selectedSize);
-                Console.CursorVisible = false;
-
-                var snake = new Models.Snake(Console.WindowWidth / 2, Console.WindowHeight / 2);
-                var food = new Food(10, 10);
-                var view = new GameView();
-                var controller = new GameController(snake, food);
+                var controller = new GameController();
 
                 LaunchMenu.LaunchMenuRun(controller);
             }

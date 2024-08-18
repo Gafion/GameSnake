@@ -57,6 +57,7 @@ namespace Snake.Views
         public void DisplayMenu()
         {
             string feedbackMessage = string.Empty;
+            int selectedIndex = 0;
 
             while (true)
             {
@@ -80,31 +81,33 @@ namespace Snake.Views
 
                 for (int i = 0; i < _menuItems.Count; i++)
                 {
-                    string itemText = $"{i + 1}. {_menuItems[i].option}";
+                    if (i == selectedIndex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    string itemText = _menuItems[i].option;
                     int leftPadding = (Console.WindowWidth - itemText.Length) / 2;
                     Console.SetCursorPosition(leftPadding, Console.CursorTop);
                     Console.WriteLine(itemText);
                 }
 
-                string exitText = "Q. Exit";
-                int exitPadding = (Console.WindowWidth - exitText.Length) / 2;
-                Console.SetCursorPosition(exitPadding, Console.CursorTop);
-                Console.WriteLine(exitText);
-
-                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                if (keyInfo.Key == ConsoleKey.Q)
+                var keyInfo = Console.ReadKey(true);
+                switch (keyInfo.Key)
                 {
-                    return;
-                }
-
-                if (int.TryParse(keyInfo.KeyChar.ToString(), out int choice) && choice > 0 && choice <= _menuItems.Count)
-                {
-                    _menuItems[choice - 1].action();
-                    feedbackMessage = _menuItems[choice - 1].feedbackMessage;
-                }
-                else
-                {
-                    feedbackMessage = "Invalid selection. Please try again.";
+                    case ConsoleKey.UpArrow:
+                        selectedIndex = (selectedIndex - 1 + _menuItems.Count) % _menuItems.Count;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        selectedIndex = (selectedIndex + 1) % _menuItems.Count;
+                        break;
+                    case ConsoleKey.Enter:
+                        _menuItems[selectedIndex].action();
+                        feedbackMessage = _menuItems[selectedIndex].feedbackMessage;
+                        break;
                 }
             }
         }

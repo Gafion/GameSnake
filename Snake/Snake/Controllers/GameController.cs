@@ -11,11 +11,17 @@ using Snake.Utilities;
 
 namespace Snake.Controllers
 {
-    internal class GameController(Snake.Models.Snake snake, Snake.Models.Food food)
+    public class GameController
     {
-        private readonly Snake.Models.Snake _snake = snake;
-        private readonly Snake.Models.Food _food = food;
-        public static int GameSpeed { get; set; } = 100; // Default game speed in milliseconds
+        public static int GameSpeed { get; set; } = 100; // Default game speed
+        private Models.Snake _snake;
+        private Models.Food _food;
+
+        public GameController()
+        {
+            _snake = new Models.Snake(Console.WindowWidth / 2, Console.WindowHeight / 2); // Initial snake position
+            _food = new Models.Food(20, 20); // Initial food position
+        }
 
         public void HandleInput()
         {
@@ -37,6 +43,10 @@ namespace Snake.Controllers
                             break;
                         case ConsoleKey.RightArrow:
                             _snake.Direction = (1, 0);
+                            break;
+                        case ConsoleKey.Escape:
+                            Logger.Log("Game paused.");
+                            PauseMenu.PauseMenuRun(this);
                             break;
                     }
                     Logger.Log("Direction changed to: " + _snake.Direction);
@@ -76,6 +86,12 @@ namespace Snake.Controllers
         {
             try
             {
+                // Reset game state
+                _snake = new Models.Snake(Console.WindowWidth / 2, Console.WindowHeight / 2); // Reset snake position
+                _food = new Models.Food(20, 20); // Reset food position
+
+                MenuView.DisplayInstructions();
+
                 Logger.Log("Game started.");
                 Console.Clear();
 
@@ -90,6 +106,7 @@ namespace Snake.Controllers
                     {
                         Logger.Log("Game loop iteration started.");
 
+                        
                         HandleInput();
                         Update();
                         Render();
