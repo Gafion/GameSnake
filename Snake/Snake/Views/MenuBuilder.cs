@@ -4,8 +4,12 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Snake.Models;
+using Snake.Views;
+using Snake.Controllers;
+using Snake.Utilities;
 
-namespace Snake
+namespace Snake.Views
 {
     internal class MenuBuilder(string menuTitle)
     {
@@ -43,35 +47,6 @@ namespace Snake
                 { 'Z', new[] { "000000000", "       0 ", "      0  ", "     0   ", "    0    ", "   0     ", "  0      ", " 0       ", "0        ", "000000000" } },
                 { ' ', new[] { "         ", "         ", "         ", "         ", "         ", "         ", "         ", "         ", "         ", "         " } },
             };
-        }
-
-        public void DisplayInstructions()
-        {
-            Console.Clear();
-            PrintLargeTitle("How to Play!");
-
-            int totalMenuHeight = _menuItems.Count + 1;
-            int topPadding = (Console.WindowHeight - totalMenuHeight) / 2;
-
-            Console.SetCursorPosition(0, topPadding);
-
-            var instructions = new List<string>
-            {
-                "Use the arrow keys to move the snake.",
-                "Eat the food to grow.",
-                "Don't run into the walls or yourself!",
-                "",
-                "Press any key to start the game."
-            };
-
-            foreach (var line in instructions)
-            {
-                int leftPadding = (Console.WindowWidth - line.Length) / 2;
-                Console.SetCursorPosition(leftPadding, Console.CursorTop);
-                Console.WriteLine(line);
-            }
-
-            Console.ReadKey(true);
         }
 
         public void AddMenuItem(string option, Action action, string feedbackMessage = "")
@@ -170,12 +145,47 @@ namespace Snake
                     }
                     Console.Write(" ");
                     Console.ResetColor();
-                    
+
                 }
                 Console.WriteLine();
                 Console.ResetColor();
             }
         }
+
+        public void DisplayInstructions()
+        {
+            Console.Clear();
+            PrintLargeTitle("How to Play!");
+
+            int totalMenuHeight = _menuItems.Count + 1;
+            int topPadding = (Console.WindowHeight - totalMenuHeight) / 2;
+
+            Console.SetCursorPosition(0, topPadding);
+
+            var instructions = new List<string>
+            {
+                "Use the arrow keys to move the snake.",
+                "Eat the food to grow.",
+                "Don't run into the walls or yourself!",
+                "",
+                "Press any key to start the game."
+            };
+
+            foreach (var line in instructions)
+            {
+                int leftPadding = (Console.WindowWidth - line.Length) / 2;
+                Console.SetCursorPosition(leftPadding, Console.CursorTop);
+                Console.WriteLine(line);
+            }
+
+            Console.ReadKey(true);
+        }
+
+        
+
+        
+
+        
     }
 }
 

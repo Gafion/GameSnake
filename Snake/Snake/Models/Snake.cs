@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Snake.Models;
+using Snake.Views;
+using Snake.Controllers;
+using Snake.Utilities;
 
-namespace Snake
+namespace Snake.Models
 {
     internal class Snake(int startX, int startY)
     {
@@ -57,6 +61,40 @@ namespace Snake
             }
         }
 
+        public bool CheckCollisions(int maxX, int maxY)
+        {
+            try
+            {
+                var head = Body[0];
+
+                // Check wall collision
+                if (head.x < 0 || head.x >= maxX || head.y < 0 || head.y >= maxY)
+                {
+                    Logger.Log("Collision with wall detected.");
+                    return true;
+                }
+
+                // Check self collision
+                for (int i = 1; i < Body.Count; i++)
+                {
+                    if (Body[i] == head)
+                    {
+                        Logger.Log("Collision with self detected.");
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Error in CheckCollisions method: " + ex.Message);
+                Logger.Log(ex.StackTrace ?? string.Empty);
+                throw;
+            }
+        }
+
+        // Debugging output
         private void PrintSnakeBody()
         {
             Logger.Log("Snake body:");

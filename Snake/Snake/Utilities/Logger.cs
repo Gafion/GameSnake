@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Snake.Models;
+using Snake.Views;
+using Snake.Controllers;
+using Snake.Utilities;
 
-namespace Snake
+namespace Snake.Utilities
 {
     internal class Logger
     {
@@ -25,7 +29,7 @@ namespace Snake
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error writing to log file: " + ex.Message);
+                Console.WriteLine($"Error writing to log file: {ex.Message}");
             }
         }
     }

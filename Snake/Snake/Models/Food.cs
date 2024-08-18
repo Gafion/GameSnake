@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Snake.Models;
+using Snake.Views;
+using Snake.Controllers;
+using Snake.Utilities;
 
-namespace Snake
+namespace Snake.Models
 {
-    internal class Food(int x, int y)
+    internal class Food(int startX, int startY)
     {
-        public (int x, int y) Position { get; private set; } = (x, y);
+        public (int x, int y) Position { get; private set; } = (startX, startY);
 
         public void Respawn(int maxX, int maxY, List<(int x, int y)> snakeBody)
         {
