@@ -20,10 +20,8 @@ namespace Snake
         {
             try
             {
-                using (StreamWriter writer = new(logFilePath, true))
-                {
-                    writer.WriteLine($"{DateTime.Now}: {message}");
-                }
+                using StreamWriter writer = new(logFilePath, true);
+                writer.WriteLine($"{DateTime.Now}: {message}");
             }
             catch (Exception ex)
             {

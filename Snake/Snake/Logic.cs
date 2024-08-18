@@ -47,17 +47,19 @@ namespace Snake
             try
             {
                 Console.Clear();
-                foreach (var segment in snake.Body)
+
+                // Render the snake
+                foreach (var (x, y) in snake.Body)
                 {
-                    Console.SetCursorPosition(segment.x, segment.y);
-                    Console.BackgroundColor = ConsoleColor.White;
-                    Console.Write(" ");
+                    Console.SetCursorPosition(x, y);
+                    Console.BackgroundColor = Program.SnakeColor;
+                    Console.Write(" "); // Print a space with the snake's color
                     Console.ResetColor();
                 }
 
                 Console.SetCursorPosition(food.Position.x, food.Position.y);
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.Write(" ");
+                Console.BackgroundColor = Program.FoodColor;
+                Console.Write(" "); // Print a space with the food's color
                 Console.ResetColor();
             }
             catch (Exception ex)

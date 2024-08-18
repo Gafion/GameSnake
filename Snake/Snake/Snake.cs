@@ -6,23 +6,17 @@ using System.Threading.Tasks;
 
 namespace Snake
 {
-    internal class Snake
+    internal class Snake(int startX, int startY)
     {
-        public List<(int x, int y)> Body { get; private set; }
-        public (int x, int y) Direction { get; set; }
-
-        public Snake(int startX, int startY)
-        {
-            Body = [(startX, startY)];
-            Direction = (0, 1);
-        }
+        public List<(int x, int y)> Body { get; private set; } = [(startX, startY)];
+        public (int x, int y) Direction { get; set; } = (0, 1);
 
         public void Move()
         {
             try
             {
-                var head = Body[0];
-                var newHead = (head.x + Direction.x, head.y + Direction.y);
+                var (x, y) = Body[0];
+                var newHead = (x + Direction.x, y + Direction.y);
                 Body.Insert(0, newHead); // Add new head to the front
 
                 // Remove the last segment if the snake didn't just grow
@@ -47,8 +41,8 @@ namespace Snake
         {
             try
             {
-                var tail = Body[Body.Count - 1];
-                var newSegment = (tail.x - Direction.x, tail.y - Direction.y);
+                var (x, y) = Body[^1];
+                var newSegment = (x - Direction.x, y - Direction.y);
                 Body.Add(newSegment); // Add a new segment at the correct position
 
                 // Debugging output
@@ -66,9 +60,9 @@ namespace Snake
         private void PrintSnakeBody()
         {
             Logger.Log("Snake body:");
-            foreach (var segment in Body)
+            foreach (var (x, y) in Body)
             {
-                Logger.Log($"({segment.x}, {segment.y})");
+                Logger.Log($"({x}, {y})");
             }
         }
     }

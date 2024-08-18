@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace Snake
 {
-    internal class Food
+    internal class Food(int x, int y)
     {
-        public (int x, int y) Position { get; private set; }
-
-        public Food(int x, int y)
-        {
-            Position = (x, y);
-        }
+        public (int x, int y) Position { get; private set; } = (x, y);
 
         public void Respawn(int maxX, int maxY, List<(int x, int y)> snakeBody)
         {
